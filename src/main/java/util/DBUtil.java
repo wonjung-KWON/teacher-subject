@@ -5,9 +5,13 @@ import java.sql.DriverManager;
 
 public class DBUtil {
 	public Connection getConnection() throws Exception {
-		Class.forName("org.mariadb.jdbc.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1/m1","root","java1234");
-		
+		String driver="org.mariadb.jdbc.Driver";
+		String dbUrl = "jdbc:mariadb://127.0.0.1:3306/m1";
+		String dbId = "root"; 
+		String dbPw = "java1234";
+		Class.forName(driver);
+		Connection conn = null;
+		conn = DriverManager.getConnection(dbUrl,dbId, dbPw);
 		return conn;
 	}
 }

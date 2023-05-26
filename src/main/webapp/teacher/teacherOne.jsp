@@ -2,37 +2,19 @@
 <%@ page import = "java.sql.*" %>
 <%@ page import = "java.util.*" %>
 <%@ page import = "vo.*" %>
+<%@ page import = "java.net.*" %>
 <%@ page import = "dao.*" %>
 <%
-	int currentPage = 1; 
-		if(request.getParameter("currentPage") != null){
-			currentPage = Integer.parseInt(request.getParameter("currentPage"));
-		}
-	int rowPerPage = 10;
-	int beginRow = (currentPage -1) * rowPerPage;
+	String msg = null;
+	if(request.getParameter("teacherNo") == null){
+		msg = URLEncoder.encode("상세보기를 볼 강사를 선택해주세요","utf-8");
+		response.sendRedirect(request.getContextPath()+"/teacher/teacherList.jsp?msg="+msg);
+		return;
+	}
+	int teacherNo = Integer.parseInt(request.getParameter("teacherNo"));
 	
-	SubjectDao sd = new SubjectDao();
-		ArrayList<Subject> list = sd.selectSubjectListByPage(beginRow, rowPerPage);
-				
-				
-	SubjectDao tr = new SubjectDao();
-	int totalRow = tr.selectSubjectCnt();
-	 
-	System.out.println(tr+"<-- tr");
-	int lastPage = totalRow/rowPerPage;
-	if(totalRow%rowPerPage != 0){
-		lastPage++;
-	}
-	int pageCount = 5;// 페이지당 출력될 페이지수
-	// startPage가 currentPage가 1~10이면 1로 고정 11~20이면 2로 고정되게 소수점을 이용하여 고정값 만드는 알고리즘
-	int startPage = ((currentPage -1)/pageCount)*pageCount+1;
-	// startPage에서 9를 더한값이 마지막 출력될 Page이지만 lastPage보다 커지면 endPage는 lastpage로변환
-	int endPage = startPage+9;
-	if(endPage > lastPage){
-		endPage = lastPage;
-	}
-	System.out.println(startPage+"<-- startPage");
-	System.out.println(endPage+"<-- endPage");
+	TeacherDao one = new TeacherDao();
+	ArrayList<HashMap<String,Object>> list = one.selectTeacherOne(teacherNo);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +23,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>subjectList</title>
+        <title>TeacherOne.jsp</title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
@@ -78,58 +60,53 @@
                         <div class="col-xl-9 col-lg-10 mx-auto">
                             <div class="bg-faded rounded p-5">
                                 <h2 class="section-heading mb-4">
-                                    <span class="section-heading-upper">구디 학원의 과목 소개</span>
+                                    <span class="section-heading-upper">강사 상세보기</span>
                                 </h2>
-                                <table>
+                              <%	
+									for(HashMap<String, Object> s : list){
+								%>
+							<h1><%=(String)(s.get("강사이름"))%>님의 강사 정보</h1>
+								<table>
 									<tr>
-								        <td>
-								        <%
-								        	if(request.getParameter("msg") != null){
-								        %>
-								        		<div><%=request.getParameter("msg") %></div>
-								        <% 
-								        	}
-								        %>
-								        </td>
+										<td>강사번호</td>
+										<td><%=(Integer)(s.get("강사번호"))%></td>
 									</tr>
-										<tr>
-											<th>subjectName</th>
-											<th>subjectTime</th>
-											<th>createdate</th>
-										</tr>
-										<%
-											for(Subject s : list){
-										%>
-											<tr>
-												<td><a href="<%=request.getContextPath()%>/subject/subjectOne.jsp?subjectNo=<%=s.getSubjectNo()%>">
-													<%=s.getSubjectName()%></a>
-												</td>
-												<td><%=s.getSubjentTime()%></td>
-												<td><%=s.getCreatedate()%></td>
-											</tr>
-										<% 
-											}
-										%>
-									</table>
-									<div>
-										<%
-											if(startPage > 5){
-										%>
-											<a href="<%=request.getContextPath()%>/subject/subjectList.jsp?currentPage=<%=startPage-1%>">이전</a>
-										<% 
-											}
-											for(int i = startPage; i<=endPage; i++){
-										%>
-											<a href="<%=request.getContextPath()%>/subject/subjectList.jsp?currentPage=<%=i%>"><%=i%></a>
-										<%
-											}
-											if(endPage<lastPage){
-										%>
-											<a href="<%=request.getContextPath()%>/subject/subjectList.jsp?currentPage=<%=endPage+1%>">다음</a>
-										<%
-											}
-										%>
-									</div>
+									<tr>
+										<td>강사아이디</td>
+										<td><%=(String)(s.get("강사아이디"))%></td>
+									</tr>
+									<tr>
+										<td>강사이름</td>
+										<td><%=(String)(s.get("강사이름"))%></td>
+									</tr>
+									<tr>
+										<td>강사내용</td>
+										<td><%=(String)(s.get("강사내용"))%></td>
+									</tr>
+									<tr>
+										<td>강사과목</td>
+										<td><%=(String)(s.get("강사과목"))%></td>
+									</tr>
+									<tr>
+										<td>등록일</td>
+										<td><%=(String)(s.get("등록일"))%></td>
+									</tr>
+									<tr>
+										<td>수정일</td>
+										<td><%=(String)(s.get("수정일"))%></td>
+									</tr>
+									<tr>
+										<td>
+											<a href="<%=request.getContextPath()%>/teacher/modifyTeacher.jsp?teacherNo=<%=(Integer)(s.get("강사번호"))%>">수정</a>
+										</td>
+										<td>
+											<a href="<%=request.getContextPath()%>/teacher/removeTeacher.jsp?teacherNo=<%=(Integer)(s.get("강사번호"))%>">삭제</a>
+										</td>
+									</tr>
+								</table>
+								<%
+									}
+								%>
                             </div>
                         </div>
                     </div>

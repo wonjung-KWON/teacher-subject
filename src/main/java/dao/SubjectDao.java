@@ -18,6 +18,7 @@ public class SubjectDao {
 		PreparedStatement stmt = conn.prepareStatement("SELECT subject_no subjectNo,subject_name subjectName, subject_time subjectTime, createdate FROM subject ORDER BY createdate desc LIMIT ?,?");
 		stmt.setInt(1, beginRow);
 		stmt.setInt(2, rowPerPage);
+		System.out.println(stmt+"<-- stmt");
 		// ResultSet
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
@@ -34,41 +35,39 @@ public class SubjectDao {
 	// 2) 과목추가
 	public int insertSubject(Subject subject) throws Exception {
 		int row = 0;
-		Subject s = new Subject();
-		String subjectName = s.getSubjectName();
-		int subjectTime = s.getSubjentTime();
 		DBUtil dbUtil = new DBUtil(); 
 		Connection conn =  dbUtil.getConnection();
 		// PreparedStatement
 		PreparedStatement stmt = conn.prepareStatement("INSERT INTO subject(subject_name, subject_time, createdate, updatedate) VALUES(?,?,NOW(),NOW())");
-		stmt.setString(1, subjectName);
-		stmt.setInt(2, subjectTime);
+		stmt.setString(1, subject.getSubjectName());
+		stmt.setInt(2, subject.getSubjentTime());
+		System.out.println(stmt+"<-- stmt");
 		row = stmt.executeUpdate();
 		return row;
 	}
 	// 3) 과목삭제
 	public int deleteSubject(int subjectNo) throws Exception {
 		int row = 0;
-		
 		DBUtil dbUtil = new DBUtil(); 
 		Connection conn =  dbUtil.getConnection();
 		// PreparedStatement
 		PreparedStatement stmt = conn.prepareStatement("DELETE FROM subject WHERE subject_no = ?");
 		stmt.setInt(1, subjectNo);
+		System.out.println(stmt+"<-- stmt");
 		row = stmt.executeUpdate();
 		return row;
 	}
 	// 4) 과목수정
 	public int updateSubject(Subject subject) throws Exception{
-		int row = 0;
-		Subject s = new Subject();
 		DBUtil dbUtil = new DBUtil(); 
 		Connection conn =  dbUtil.getConnection();
 		// PreparedStatement
 		PreparedStatement stmt = conn.prepareStatement("UPDATE subject SET subject_name = ?, subject_time = ?, updatedate = now() WHERE subject_no = ?");
-		stmt.setString(1, s.getSubjectName());
-		stmt.setInt(2, s.getSubjentTime());
-		row = stmt.executeUpdate();
+		stmt.setString(1, subject.getSubjectName());
+		stmt.setInt(2, subject.getSubjentTime());
+		stmt.setInt(3, subject.getSubjectNo());
+		System.out.println(stmt+"<-- stmt");
+		int row = stmt.executeUpdate();
 		return row;
 	}
 	// 5) 과목 하나 상세
@@ -80,6 +79,7 @@ public class SubjectDao {
 		PreparedStatement stmt = conn.prepareStatement("SELECT subject_no subjectNo, subject_name subjectName, subject_time subjectTime, createdate , updatedate FROM subject WHERE subject_no = ?");
 		// ResultSet
 		stmt.setInt(1, subjectNo);
+		System.out.println(stmt+"<-- stmt");
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
 			
@@ -99,6 +99,7 @@ public class SubjectDao {
 		Connection conn =  dbUtil.getConnection();
 		// PreparedStatement
 		PreparedStatement stmt  = conn.prepareStatement("SELECT count(*) from subject");
+		System.out.println(stmt+"<-- stmt");
 		// ResultSet
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {

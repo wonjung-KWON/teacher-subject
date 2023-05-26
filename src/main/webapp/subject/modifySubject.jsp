@@ -1,38 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.*" %>
-<%@ page import = "java.util.*" %>
-<%@ page import = "vo.*" %>
 <%@ page import = "dao.*" %>
+<%@ page import = "vo.*" %>
+<%@ page import = "java.net.*" %>
 <%
-	int currentPage = 1; 
-		if(request.getParameter("currentPage") != null){
-			currentPage = Integer.parseInt(request.getParameter("currentPage"));
-		}
-	int rowPerPage = 10;
-	int beginRow = (currentPage -1) * rowPerPage;
+	String msg = null;
+	if(request.getParameter("subjectNo") == null){
+		msg = URLEncoder.encode("변경할 Subject를 선택해주세요","utf-8");
+		response.sendRedirect(request.getContextPath()+"/subject/subjectOne.jsp?msg="+msg);
+		return;
+	}
+	int subjectNo = Integer.parseInt(request.getParameter("subjectNo"));
 	
-	SubjectDao sd = new SubjectDao();
-		ArrayList<Subject> list = sd.selectSubjectListByPage(beginRow, rowPerPage);
-				
-				
-	SubjectDao tr = new SubjectDao();
-	int totalRow = tr.selectSubjectCnt();
-	 
-	System.out.println(tr+"<-- tr");
-	int lastPage = totalRow/rowPerPage;
-	if(totalRow%rowPerPage != 0){
-		lastPage++;
-	}
-	int pageCount = 5;// 페이지당 출력될 페이지수
-	// startPage가 currentPage가 1~10이면 1로 고정 11~20이면 2로 고정되게 소수점을 이용하여 고정값 만드는 알고리즘
-	int startPage = ((currentPage -1)/pageCount)*pageCount+1;
-	// startPage에서 9를 더한값이 마지막 출력될 Page이지만 lastPage보다 커지면 endPage는 lastpage로변환
-	int endPage = startPage+9;
-	if(endPage > lastPage){
-		endPage = lastPage;
-	}
-	System.out.println(startPage+"<-- startPage");
-	System.out.println(endPage+"<-- endPage");
+	SubjectDao one = new SubjectDao();
+		Subject list = one.selectSubjectOne(subjectNo);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,9 +58,11 @@
                         <div class="col-xl-9 col-lg-10 mx-auto">
                             <div class="bg-faded rounded p-5">
                                 <h2 class="section-heading mb-4">
-                                    <span class="section-heading-upper">구디 학원의 과목 소개</span>
+                                    <span class="section-heading-upper">과목 수정</span>
                                 </h2>
-                                <table>
+                               <form action="<%=request.getContextPath()%>/subject/modifySubjectAction.jsp" method="post">
+								<input type="hidden" name="subjectNo" value="<%=list.getSubjectNo()%>">
+								<table>
 									<tr>
 								        <td>
 								        <%
@@ -92,44 +74,23 @@
 								        %>
 								        </td>
 									</tr>
-										<tr>
-											<th>subjectName</th>
-											<th>subjectTime</th>
-											<th>createdate</th>
-										</tr>
-										<%
-											for(Subject s : list){
-										%>
-											<tr>
-												<td><a href="<%=request.getContextPath()%>/subject/subjectOne.jsp?subjectNo=<%=s.getSubjectNo()%>">
-													<%=s.getSubjectName()%></a>
-												</td>
-												<td><%=s.getSubjentTime()%></td>
-												<td><%=s.getCreatedate()%></td>
-											</tr>
-										<% 
-											}
-										%>
-									</table>
-									<div>
-										<%
-											if(startPage > 5){
-										%>
-											<a href="<%=request.getContextPath()%>/subject/subjectList.jsp?currentPage=<%=startPage-1%>">이전</a>
-										<% 
-											}
-											for(int i = startPage; i<=endPage; i++){
-										%>
-											<a href="<%=request.getContextPath()%>/subject/subjectList.jsp?currentPage=<%=i%>"><%=i%></a>
-										<%
-											}
-											if(endPage<lastPage){
-										%>
-											<a href="<%=request.getContextPath()%>/subject/subjectList.jsp?currentPage=<%=endPage+1%>">다음</a>
-										<%
-											}
-										%>
-									</div>
+									<tr>
+										<td>subjectName</td>
+										<td><%=list.getSubjectName()%></td>
+										<td>
+											<input type="text" name="subjectName">
+										</td>	
+									</tr>
+									<tr>
+										<td>subjectTime</td>
+										<td><%=list.getSubjentTime()%></td>	
+										<td>
+											<input type="text" name="subjectTime">
+										</td>			
+									</tr>
+								</table>
+									<button type="submit">수정</button>
+								</form>
                             </div>
                         </div>
                     </div>

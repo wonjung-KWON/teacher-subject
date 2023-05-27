@@ -2,6 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+    <!-- Latest compiled and minified CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	
+	<!-- Latest compiled JavaScript -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
@@ -37,7 +42,6 @@
         </nav>
         <section class="page-section about-heading">
             <div class="container">
-                <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src="assets/img/about.jpg" alt="..." />
                 <div class="about-heading-content">
                     <div class="row">
                         <div class="col-xl-9 col-lg-10 mx-auto">
@@ -75,7 +79,8 @@
 										</td>
 									</tr>
 								</table>
-								<button type="submit">추가하기</button>
+								<br>
+								<button type="submit" class="btn btn-outline-warning">추가하기</button>
 							</form>
                             </div>
                         </div>

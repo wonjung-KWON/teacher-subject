@@ -29,7 +29,7 @@
                     <ul class="navbar-nav mx-auto">
                          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="<%=request.getContextPath()%>/home.jsp">Home</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="<%=request.getContextPath()%>/subject/subjectList.jsp">과목 목록</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="<%=request.getContextPath()%>/teacher/teacherList.js">강사목록</a></li>
+                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="<%=request.getContextPath()%>/teacher/teacherList.jsp">강사목록</a></li>
                         <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="<%=request.getContextPath()%>/subject/insertSubject.jsp">과목 추가</a></li>
                     </ul>
                 </div>
@@ -37,7 +37,6 @@
         </nav>
         <section class="page-section about-heading">
             <div class="container">
-                <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src="assets/img/about.jpg" alt="..." />
                 <div class="about-heading-content">
                     <div class="row">
                         <div class="col-xl-9 col-lg-10 mx-auto">
@@ -71,7 +70,8 @@
 											</td>
 										</tr>
 									</table>
-									<button type="submit">추가하기</button>
+									<br>
+									<button type="submit" class="btn btn-outline-warning">추가하기</button>
 								</form>
                             </div>
                         </div>

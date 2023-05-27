@@ -52,7 +52,6 @@
         </nav>
         <section class="page-section about-heading">
             <div class="container">
-                <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" src="assets/img/about.jpg" alt="..." />
                 <div class="about-heading-content">
                     <div class="row">
                         <div class="col-xl-9 col-lg-10 mx-auto">
@@ -89,7 +88,8 @@
 										</td>			
 									</tr>
 								</table>
-									<button type="submit">수정</button>
+								<br>
+									<button type="submit" class="btn btn-outline-warning">수정</button>
 								</form>
                             </div>
                         </div>
